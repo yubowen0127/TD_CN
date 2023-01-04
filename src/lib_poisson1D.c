@@ -6,9 +6,41 @@
 #include "lib_poisson1D.h"
 
 void set_GB_operator_colMajor_poisson1D(double* AB, int *lab, int *la, int *kv){
+	
+	for(int i = 0; i < *la; i++) {
+		
+		for(int j = 0; j < *(lab); j++) {
+			
+			if (j < *kv) {
+				AB[i * *lab + j] = 0.0;
+			}
+			else if(j == *kv + 1) {
+				AB[i * *lab + j] = 2.0;
+			}
+			else {
+				B[i * *lab + j] = -1,0;
+			}
+		}
+	}
+	
+	AB[*kv] = 0.0;
+	AB[(*lab) * (*la) -1] = 0.0;
 }
 
 void set_GB_operator_colMajor_poisson1D_Id(double* AB, int *lab, int *la, int *kv){
+	
+	for(int i = 0; i < *la; i++) {
+		
+		for(int j = 0; j < *lab; j++) {
+			
+			if(j == 1) {
+				AB[i * *lab + j] = 1.0;
+			}
+			else {
+				AB[i * *lab + j] = 0.0;
+			}
+		}
+	}
 }
 
 void set_dense_RHS_DBC_1D(double* RHS, int* la, double* BC0, double* BC1){
@@ -21,9 +53,21 @@ void set_dense_RHS_DBC_1D(double* RHS, int* la, double* BC0, double* BC1){
 }  
 
 void set_analytical_solution_DBC_1D(double* EX_SOL, double* X, int* la, double* BC0, double* BC1){
+	
+	for(int i = 0; i < *la; i++) {
+		
+		EX_SOL[i] = *BC0 + X[i] * (*BC1 - *BC0);
+	}
 }  
 
 void set_grid_points_1D(double* x, int* la){
+	
+	const double h = 1.0/ (double) (*la + 1); 
+	
+	for(int i = 1; i < *la + 1; i++) {
+		
+		X[i-1] = i*h;
+	}
 }
 
 void write_GB_operator_rowMajor_poisson1D(double* AB, int* lab, int* la, char* filename){
