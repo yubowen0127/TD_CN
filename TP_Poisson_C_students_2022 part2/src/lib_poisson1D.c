@@ -142,14 +142,31 @@ void write_xy(double* vec, double* x, int* la, char* filename){
 }  
 
 void eig_poisson1D(double* eigval, int *la){
+	
+	for(int i = 0; i < *la; i++){
+		double bmd=1.0/(*la+1);
+		double w1=((1.0*i+1.0)*PI*bmd)/2.0;
+		eigval[i]=4*sin(w1)*sin(w1);
+	} 
 }
 
 double eigmax_poisson1D(int *la){
-  return 0;
+	
+	double bmd=1.0/(*la+1);
+	double w2 = sin((*la *PI*bmd)/2.0);
+	double max = 4*w2*w2;
+	
+	return max;
+	//return 0;
 }
 
 double eigmin_poisson1D(int *la){
-  return 0;
+	
+	double bmd=1.0/(*la+1);
+	double w3 = sin((PI*bmd)/2.0);
+	double min = 4*w3*w3;
+	return min;
+	//return 0;
 }
 
 double richardson_alpha_opt(int *la){
